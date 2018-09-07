@@ -1,0 +1,12 @@
+- hosts: localhost
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Stat/Stop docker service
+      shell: |
+          # service apache2 start > /dev/null
+          service docker status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./docker.sh          
+      ignore_errors: yes
+      register: command_result
+    - debug: msg={{ command_result.stdout }}

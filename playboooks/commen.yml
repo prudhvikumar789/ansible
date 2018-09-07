@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  become_user: prudhvi
+  tasks:
+    - name: checking IP
+      shell: |
+          ifconfig
+          # sudo service apache2 start > /dev/null
+          # service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          # ./test.sh          
+      ignore_errors: yes
+      register: command_result
+    - debug: msg={{ command_result.stdout }}

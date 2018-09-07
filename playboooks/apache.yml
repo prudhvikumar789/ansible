@@ -1,0 +1,79 @@
+---
+- hosts: localhost
+  become: true
+  become_method: sudo
+  tasks:
+    - name: startapache
+      shell: |
+          service apache2 start > /dev/null
+          service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./test.sh   
+      tags: 
+        - start       
+      ignore_errors: yes
+      register: apstart_result
+    - debug: msg={{ apstart_result.stdout }}
+      tags: 
+    - status
+    - command_result
+
+
+    - name: stopapache
+      shell: |
+          service apache2 stop > /dev/null
+          service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./test.sh          
+      ignore_errors: yes
+      register: apstop_result
+    - debug: msg={{ apstop_result.stdout }}
+
+    - name: statusapache
+      shell: |
+          service apache2 status > /dev/null
+          service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./test.sh
+      ignore_errors: yes
+      register: apstatus_result
+    - debug: msg={{ apstatus_result.stdout }}
+
+    - name: restartapache
+      shell: |
+          service apache2 restart > /dev/null
+          service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./test.sh          
+      ignore_errors: yes
+      register: aprestart_result
+    - debug: msg={{ aprestart_result.stdout }}
+
+    - name: statusdocker
+      shell: |
+          service docker status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./docker.sh
+      ignore_errors: yes
+      register: docstatus_result
+    - debug: msg={{ docstatus_result.stdout }}
+
+
+    - name: startdocker
+      shell: |
+          service docker start 2>&1 | tee /tmp/out.txt > /dev/null
+          ./docker.sh          
+      ignore_errors: yes
+      register: docstart_result
+    - debug: msg={{ docstart_result.stdout }}
+
+    - name: stopdocker
+      shell: |
+          service docker stop 2>&1 | tee /tmp/out.txt > /dev/null
+          ./docker.sh          
+      ignore_errors: yes
+      register: docstop_result
+    - debug: msg={{ docstop_result.stdout }}
+
+    - name: restartdocker
+      shell: |
+          service docker restart 2>&1 | tee /tmp/out.txt > /dev/null
+          ./docker.sh          
+      ignore_errors: yes
+      register: docrestart_result
+    - debug: msg={{ docrestart_result.stdout }}

@@ -1,0 +1,10 @@
+- name: mail
+    local_action:
+      module: mail
+      host: "smtp.gmail.com" 
+      port: "587"   
+      username: 'prudhvikumar530@gmail.com'   
+      password: 'ppdxuimyhgigjytn'  
+      to: "prudhvikumar789@gmail.com>"  
+      subject: 'Ansible-report'
+      body: 'System {{ ansible_hostname }} has been successfully provisioned. User {{ ansible_user_id }}'

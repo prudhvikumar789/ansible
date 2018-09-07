@@ -1,0 +1,14 @@
+---
+- hosts: 192.168.1.41
+  become: yes
+  become_user: prudhvi
+  tasks:
+    - name: stop apache service
+      shell: |
+         service apache2 stop
+         service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+         sed '6,$d' /tmp/out.txt | sed '1,4d' 2>&1 | tee /tmp/trim.txt > /dev/null
+         ./test.sh
+      ignore_errors: yes
+      register: command_result
+    - debug: msg={{ command_result.stdout }}

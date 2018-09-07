@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: Checking apache status
+      apt: pkg=apache2 state=installed update_cache=true
+      notify:
+        - start apache2
+
+  handlers:
+    - name: start apache2
+      service: name=apache2 state=started

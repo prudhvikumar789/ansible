@@ -1,0 +1,13 @@
+---
+- hosts: 192.168.1.41
+  become: yes
+  become_user: prudhvi
+  tasks:
+    - name: Stat/Stop apache service
+      shell: |
+          sudo service apache2 start > /dev/null
+          service apache2 status 2>&1 | tee /tmp/out.txt > /dev/null
+          ./test.sh          
+      ignore_errors: yes
+      register: command_result
+    - debug: msg={{ command_result.stdout }}

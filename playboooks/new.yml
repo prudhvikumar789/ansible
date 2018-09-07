@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  become: true
+  become_method: sudo
+  tasks:
+    - name: test services
+      command: service {{ item }} status
+      with_items:
+           - apache2
+           - docker
+      register: result
+    - debug: msg=" {{ item }} is running"
+      when: result.stdout.find("running") != -1
+    - debug: msg=" {{ item }} is not running"
+      when: result.stdout.find("running") == -1
