@@ -1,0 +1,20 @@
+---
+ - hosts: 172.17.0.3
+   become_method: su
+   user: root
+   tasks:
+    # - name: Stat/Stop nginx service
+    #   shell: service nginx start
+    #   ignore_errors: yes
+    #   register: command_result
+    # - debug: msg={{ command_result.stdout }}
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+
+    - name: Checking nginx status
+      shell: service nginx status
+      ignore_errors: yes
+      register: stat_result
+    - debug: msg={{ stat_result.stdout }}

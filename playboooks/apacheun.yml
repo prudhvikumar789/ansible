@@ -1,0 +1,11 @@
+---
+ - hosts: 172.17.0.2
+   become_method: sudo
+   user: root
+   tasks:
+    - name: apache2 nginx
+      service:
+          name: apache2
+          state: stopped
+    - name: ensure apache2 is not installed
+      apt: name=apache2 state=absent

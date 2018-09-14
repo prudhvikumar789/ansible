@@ -1,0 +1,25 @@
+ #  apt_repository: repo='ppa:nginx/stable' state=present
+       apt_repository: repo='ppa:nginx/stable' 
+       register: ppainstalled
+     - debug: msg={{ ppainstalled.stdout }}
+     apt:
+       name: nginx
+       state: installed
+       update_cache: true
+
+
+
+
+
+
+        - name: Add Nginx Repository
+       apt_repository: validate_certs=no repo='ppa:nginx/stable' state=present
+       ignore_errors: yes
+       register: ppadd
+     - debug: var=ppadd.stdout_lines
+
+     - name: Install Nginx
+       apt:
+        name: nginx
+        state: installed
+        update_cache: true

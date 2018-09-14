@@ -1,0 +1,52 @@
+---
+ - hosts: webservers
+   become_method: sudo
+   user: root
+   tasks:
+    - name: copy the file
+      tags:
+        - nolink
+      become_method: sudo
+      copy:
+        src: /home/git/filefrom03
+        dest: /opt/backup/git/
+        remote_src: yes
+      become: yes
+    
+    - name: Checking content of the files
+      tags:
+        - nolink
+      shell: cat /opt/backup/git/filefrom03
+      ignore_errors: yes
+      register: file_result
+    - debug: msg={{ file_result.stdout }}
+
+    - name: Changing the content
+      tags:
+        - nolink
+      shell: |
+         echo "changed the content by prudhvi" >> /opt/backup/git/filefrom03
+         cat /opt/backup/git/filefrom03
+      ignore_errors: yes
+      register: file_result
+    - debug: msg={{ file_result.stdout }}
+
+    - name: create symlink
+      tags:
+        - slink
+      file:
+        src: /opt/backup/git/filefrom03
+        dest: /home/git/file03
+        remote_src: yes
+        state: link
+      become: yes
+
+    - name: Changing the content of slink
+      tags:
+        - slink
+      shell: |
+         echo "Tlhis is Symlink content" >> /opt/backup/git/filefrom03
+         cat /home/git/file03
+      ignore_errors: yes
+      register: file_result
+    - debug: msg={{ file_result.stdout }}

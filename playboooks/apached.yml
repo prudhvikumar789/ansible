@@ -1,0 +1,19 @@
+---
+ - hosts: 172.17.0.2
+   become_method: sudo
+   user: root
+   tasks:
+    - name: ensure apache2 is at the latest version
+      apt: name=apache2 state=latest
+      register: ver_chk
+    - debug: var=ver_chk.stdout_lines
+    - name: start apache2
+      service:
+          name: apache2
+          state: started
+    
+    - name: Checking apache2 status
+      shell: service apache2 status
+      ignore_errors: yes
+      register: stat_result
+    - debug: msg={{ stat_result.stdout }}
