@@ -12,7 +12,7 @@
 
 
 
-        - name: Add Nginx Repository
+     - name: Add Nginx Repository
        apt_repository: validate_certs=no repo='ppa:nginx/stable' state=present
        ignore_errors: yes
        register: ppadd
